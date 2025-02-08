@@ -3,9 +3,9 @@ package cmd
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/handlers"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/interfaces"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/services"
+	"github.com/nurmuh-alhakim18/evermos-project/internal/handlers/healthH"
+	"github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/healthI"
+	"github.com/nurmuh-alhakim18/evermos-project/internal/services/healthS"
 )
 
 func ServeHTTP() {
@@ -19,12 +19,12 @@ func ServeHTTP() {
 }
 
 type Dependency struct {
-	healthHandler interfaces.HealthHandlerInterface
+	healthHandler healthI.HealthHandlerInterface
 }
 
 func dependencyInject() Dependency {
-	healthSvc := &services.HealthService{}
-	healthHandler := &handlers.HealthHandler{Service: healthSvc}
+	healthSvc := &healthS.HealthService{}
+	healthHandler := &healthH.HealthHandler{Service: healthSvc}
 
 	return Dependency{
 		healthHandler: healthHandler,

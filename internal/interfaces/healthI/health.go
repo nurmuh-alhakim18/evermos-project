@@ -1,4 +1,4 @@
-package interfaces
+package healthI
 
 import "github.com/gofiber/fiber/v2"
 

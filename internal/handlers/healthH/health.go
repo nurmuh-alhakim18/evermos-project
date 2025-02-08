@@ -1,13 +1,13 @@
-package handlers
+package healthH
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/interfaces"
+	"github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/healthI"
 )
 
 type HealthHandler struct {
-	Service interfaces.HealthServiceInterface
+	Service healthI.HealthServiceInterface
 }
 
 func (h *HealthHandler) HealthCheck(ctx *fiber.Ctx) error {

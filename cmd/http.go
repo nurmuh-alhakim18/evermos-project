@@ -4,13 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nurmuh-alhakim18/evermos-project/external"
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/handlers/healthH"
+	healthhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/health_handler"
 	userhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/user_handler"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/healthI"
+	healthinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/health_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
 	"github.com/nurmuh-alhakim18/evermos-project/internal/middleware"
 	userrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/user_repository"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/services/healthS"
+	healthservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/health_service"
 	userservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/user_service"
 	"gorm.io/gorm"
 )
@@ -30,15 +30,15 @@ func ServeHTTP() {
 }
 
 type Dependency struct {
-	healthHandler healthI.HealthHandlerInterface
+	healthHandler healthinterface.HealthHandlerInterface
 	userHandler   userinterface.UserHandlerInterface
 }
 
 func dependencyInject(db *gorm.DB) Dependency {
 	external := &external.External{}
 
-	healthSvc := &healthS.HealthService{}
-	healthHandler := &healthH.HealthHandler{Service: healthSvc}
+	healthSvc := &healthservice.HealthService{}
+	healthHandler := &healthhandler.HealthHandler{Service: healthSvc}
 
 	userRepo := &userrepository.UserRepository{DB: db}
 	userSvc := &userservice.UserService{UserRepository: userRepo, External: external}

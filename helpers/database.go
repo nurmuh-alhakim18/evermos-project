@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -17,7 +18,7 @@ func LoadDatabase() {
 	user := GetEnv("DB_USER", "")
 	password := GetEnv("DB_PASSWORD", "")
 	dbname := GetEnv("DB_NAME", "")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", user, password, host, port, dbname)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local", user, password, host, port, dbname)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
@@ -33,5 +34,5 @@ func LoadDatabase() {
 
 	log.Println("Connected to database")
 
-	// DB.AutoMigrate()
+	DB.AutoMigrate(&usermodel.User{})
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 
+	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
 	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -34,5 +35,5 @@ func LoadDatabase() {
 
 	log.Println("Connected to database")
 
-	DB.AutoMigrate(&usermodel.User{})
+	DB.AutoMigrate(&usermodel.User{}, &alamatmodel.Alamat{})
 }

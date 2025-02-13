@@ -12,14 +12,21 @@ type UserRepositoryInterface interface {
 	GetUser(ctx context.Context, phoneNumber, email string) (*usermodel.User, error)
 	GetUserByPhone(ctx context.Context, phoneNumber string) (*usermodel.User, error)
 	GetUserByID(ctx context.Context, userID int) (*usermodel.User, error)
+	UpdateUser(ctx context.Context, userID int, userInput usermodel.UpdateUser) (*usermodel.UpdateUser, error)
 }
 
 type UserServiceInterface interface {
 	Register(ctx context.Context, req usermodel.User) error
 	Login(ctx context.Context, req usermodel.LoginRequest) (*usermodel.LoginResponse, error)
+
+	GetProfile(ctx context.Context, userID int) (*usermodel.User, error)
+	UpdateUser(ctx context.Context, userID int, req usermodel.UpdateUser) (*usermodel.UpdateUser, error)
 }
 
 type UserHandlerInterface interface {
 	Register(ctx *fiber.Ctx) error
 	Login(ctx *fiber.Ctx) error
+
+	GetProfile(ctx *fiber.Ctx) error
+	UpdateUser(ctx *fiber.Ctx) error
 }

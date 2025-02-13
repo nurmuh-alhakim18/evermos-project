@@ -13,7 +13,7 @@ type UserRepository struct {
 }
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *usermodel.User) error {
-	return r.DB.Create(user).Error
+	return r.DB.WithContext(ctx).Create(user).Error
 }
 
 func (r *UserRepository) GetUser(ctx context.Context, phoneNumber, email string) (*usermodel.User, error) {
@@ -32,7 +32,7 @@ func (r *UserRepository) GetUser(ctx context.Context, phoneNumber, email string)
 
 func (r *UserRepository) GetUserByPhone(ctx context.Context, phoneNumber string) (*usermodel.User, error) {
 	var user usermodel.User
-	err := r.DB.Where("no_telp = ?", phoneNumber).First(&user).Error
+	err := r.DB.WithContext(ctx).Where("no_telp = ?", phoneNumber).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -46,7 +46,7 @@ func (r *UserRepository) GetUserByPhone(ctx context.Context, phoneNumber string)
 
 func (r *UserRepository) GetUserByID(ctx context.Context, userID int) (*usermodel.User, error) {
 	var user usermodel.User
-	err := r.DB.Where("id = ?", userID).First(&user).Error
+	err := r.DB.WithContext(ctx).First(&user, userID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -56,4 +56,34 @@ func (r *UserRepository) GetUserByID(ctx context.Context, userID int) (*usermode
 	}
 
 	return &user, nil
+}
+
+func (r *UserRepository) UpdateUser(ctx context.Context, userID int, userInput usermodel.UpdateUser) (*usermodel.UpdateUser, error) {
+	var user usermodel.User
+	err := r.DB.WithContext(ctx).First(&user, userID).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	err = r.DB.WithContext(ctx).Model(&user).Updates(userInput).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &usermodel.UpdateUser{
+		Nama:         user.Nama,
+		KataSandi:    "",
+		NoTelp:       user.NoTelp,
+		TanggalLahir: user.TanggalLahir,
+		JenisKelamin: user.JenisKelamin,
+		Tentang:      user.Tentang,
+		Pekerjaan:    user.Pekerjaan,
+		Email:        user.Email,
+		IdProvinsi:   user.IdProvinsi,
+		IdKota:       user.IdKota,
+	}, nil
 }

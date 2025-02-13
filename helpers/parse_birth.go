@@ -13,3 +13,12 @@ func ParseBirthDate(birthDate string) (time.Time, error) {
 
 	return date, nil
 }
+
+func BirthDateToIndoFormat(birthDate string) (string, error) {
+	parsedTime, err := time.Parse(time.RFC3339, birthDate)
+	if err != nil {
+		return "", err
+	}
+
+	return parsedTime.Format("02/01/2006"), err
+}

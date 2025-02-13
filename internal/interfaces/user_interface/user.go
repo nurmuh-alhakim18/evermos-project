@@ -11,6 +11,7 @@ type UserRepositoryInterface interface {
 	CreateUser(ctx context.Context, user *usermodel.User) error
 	GetUser(ctx context.Context, phoneNumber, email string) (*usermodel.User, error)
 	GetUserByPhone(ctx context.Context, phoneNumber string) (*usermodel.User, error)
+	GetUserByID(ctx context.Context, userID int) (*usermodel.User, error)
 }
 
 type UserServiceInterface interface {

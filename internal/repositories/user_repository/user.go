@@ -43,3 +43,17 @@ func (r *UserRepository) GetUserByPhone(ctx context.Context, phoneNumber string)
 
 	return &user, nil
 }
+
+func (r *UserRepository) GetUserByID(ctx context.Context, userID int) (*usermodel.User, error) {
+	var user usermodel.User
+	err := r.DB.Where("id = ?", userID).First(&user).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, err
+	}
+
+	return &user, nil
+}

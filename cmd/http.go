@@ -8,7 +8,6 @@ import (
 	userhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/user_handler"
 	healthinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/health_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
-	"github.com/nurmuh-alhakim18/evermos-project/internal/middleware"
 	userrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/user_repository"
 	healthservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/health_service"
 	userservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/user_service"
@@ -20,7 +19,7 @@ func ServeHTTP() {
 	dependency := dependencyInject(helpers.DB)
 
 	api := app.Group("/api/v1")
-	api.Get("/health", middleware.AuthMiddleware, dependency.healthHandler.HealthCheck)
+	api.Get("/health", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.healthHandler.HealthCheck)
 
 	api.Post("/auth/register", dependency.userHandler.Register)
 	api.Post("/auth/login", dependency.userHandler.Login)
@@ -30,6 +29,8 @@ func ServeHTTP() {
 }
 
 type Dependency struct {
+	userRepository userinterface.UserRepositoryInterface
+
 	healthHandler healthinterface.HealthHandlerInterface
 	userHandler   userinterface.UserHandlerInterface
 }
@@ -45,7 +46,8 @@ func dependencyInject(db *gorm.DB) Dependency {
 	userHandler := &userhandler.UserHandler{UserService: userSvc}
 
 	return Dependency{
-		healthHandler: healthHandler,
-		userHandler:   userHandler,
+		userRepository: userRepo,
+		healthHandler:  healthHandler,
+		userHandler:    userHandler,
 	}
 }

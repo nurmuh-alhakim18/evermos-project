@@ -3,7 +3,6 @@ package helpers
 import (
 	"errors"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -51,15 +50,10 @@ func ValidateJWT(tokenString string) (interface{}, error) {
 }
 
 func GetBearerToken(ctx *fiber.Ctx) (string, error) {
-	authHeader := ctx.Get("Authorization")
+	authHeader := ctx.Get("token")
 	if authHeader == "" {
-		return "", errors.New("authorization header missing")
+		return "", errors.New("token header missing")
 	}
 
-	parts := strings.Split(authHeader, " ")
-	if len(parts) != 2 || parts[0] != "Bearer" || parts[1] == "" {
-		return "", errors.New("invalid authorization header")
-	}
-
-	return parts[1], nil
+	return authHeader, nil
 }

@@ -10,5 +10,7 @@ func main() {
 
 	helpers.LoadDatabase()
 
+	helpers.LoadS3Session()
+
 	cmd.ServeHTTP()
 }

@@ -6,15 +6,15 @@ import (
 	"fmt"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
-	externalinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/external_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
+	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
 	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
-	UserRepository userinterface.UserRepositoryInterface
-	External       externalinterface.ExternalInterface
+	UserRepository    userinterface.UserRepositoryInterface
+	WilayahRepository wilayahinterface.WilayahRepositoryInterface
 }
 
 func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
@@ -75,12 +75,12 @@ func (s *UserService) Login(ctx context.Context, req usermodel.LoginRequest) (*u
 		return nil, fmt.Errorf("failed to generate token: %v", err)
 	}
 
-	provinsi, err := s.External.GetProvince(user.IdProvinsi)
+	provinsi, err := s.WilayahRepository.GetProvinceDetail(ctx, user.IdProvinsi)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get province: %v", err)
 	}
 
-	kota, err := s.External.GetCity(user.IdProvinsi, user.IdKota)
+	kota, err := s.WilayahRepository.GetCityDetail(ctx, user.IdKota)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get city: %v", err)
 	}
@@ -93,8 +93,8 @@ func (s *UserService) Login(ctx context.Context, req usermodel.LoginRequest) (*u
 		Tentang:      user.Tentang,
 		Pekerjaan:    user.Pekerjaan,
 		Email:        user.Email,
-		Provinsi:     provinsi,
-		Kota:         kota,
+		Provinsi:     *provinsi,
+		Kota:         *kota,
 		Token:        token,
 	}, nil
 }

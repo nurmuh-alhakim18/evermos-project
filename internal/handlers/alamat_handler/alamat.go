@@ -116,7 +116,7 @@ func (h *AlamatHandler) UpdateAlamat(ctx *fiber.Ctx) error {
 func (h *AlamatHandler) DeleteAlamat(ctx *fiber.Ctx) error {
 	userID, ok := ctx.Locals("userID").(int)
 	if !ok {
-		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, "Failed to PUT data", "Invalid user ID", nil)
+		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, "Failed to DELETE data", "Invalid user ID", nil)
 	}
 
 	alamatIDString := ctx.Params("id")

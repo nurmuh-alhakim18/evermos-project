@@ -35,7 +35,11 @@ func (r *WilayahRepository) GetProvinces(ctx context.Context, search string, off
 		}
 	}
 
-	return provinces[offset : offset+limit], nil
+	if limit < len(provinces) {
+		return provinces[offset : offset+limit], nil
+	}
+
+	return provinces, nil
 }
 
 func (r *WilayahRepository) GetCities(ctx context.Context, provinceID string) ([]usermodel.Kota, error) {

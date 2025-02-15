@@ -47,7 +47,9 @@ func (h *AlamatHandler) GetAlamats(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.FailedGetMessage, constants.InvalidUserIDErr, nil)
 	}
 
-	alamats, err := h.AlamatService.GetAlamats(ctx.Context(), userID)
+	judulAlamat := ctx.Query("judul_alamat", "")
+
+	alamats, err := h.AlamatService.GetAlamats(ctx.Context(), userID, judulAlamat)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}

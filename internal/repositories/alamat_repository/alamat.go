@@ -20,9 +20,15 @@ func (r *AlamatRepository) CreateAlamat(ctx context.Context, alamat *alamatmodel
 	return &alamat.ID, nil
 }
 
-func (r *AlamatRepository) GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
+func (r *AlamatRepository) GetAlamats(ctx context.Context, userID int, judulAlamat string) ([]alamatmodel.Alamat, error) {
 	var alamats []alamatmodel.Alamat
-	err := r.DB.WithContext(ctx).Where("id_user = ?", userID).Find(&alamats).Error
+	query := r.DB.WithContext(ctx).Where("id_user = ?", userID)
+
+	if judulAlamat != "" {
+		query = query.Where("LOWER(judul_alamat) LIKE LOWER(?)", "%"+judulAlamat+"%")
+	}
+
+	err := query.Find(&alamats).Error
 	if err != nil {
 		return nil, err
 	}

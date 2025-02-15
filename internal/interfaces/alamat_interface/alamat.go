@@ -9,7 +9,7 @@ import (
 
 type AlamatRepositoryInterface interface {
 	CreateAlamat(ctx context.Context, alamat *alamatmodel.Alamat) (*int, error)
-	GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error)
+	GetAlamats(ctx context.Context, userID int, judulAlamat string) ([]alamatmodel.Alamat, error)
 	GetAlamatByID(ctx context.Context, alamatID int) (*alamatmodel.Alamat, error)
 	UpdateAlamat(ctx context.Context, alamatID int, alamatInput alamatmodel.UpdateAlamat) error
 	DeleteAlamat(ctx context.Context, alamatID int) error
@@ -17,7 +17,7 @@ type AlamatRepositoryInterface interface {
 
 type AlamatServiceInterface interface {
 	CreateAlamat(ctx context.Context, req alamatmodel.Alamat) (*int, error)
-	GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error)
+	GetAlamats(ctx context.Context, userID int, judulAlamat string) ([]alamatmodel.Alamat, error)
 	GetAlamatByID(ctx context.Context, alamatID int) (*alamatmodel.Alamat, error)
 	UpdateAlamat(ctx context.Context, alamatID int, req alamatmodel.UpdateAlamat) error
 	DeleteAlamat(ctx context.Context, alamatID int) error

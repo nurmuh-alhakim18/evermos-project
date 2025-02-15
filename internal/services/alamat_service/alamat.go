@@ -21,8 +21,8 @@ func (s *AlamatService) CreateAlamat(ctx context.Context, req alamatmodel.Alamat
 	return alamatID, nil
 }
 
-func (s *AlamatService) GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
-	alamats, err := s.AlamatRepository.GetAlamats(ctx, userID)
+func (s *AlamatService) GetAlamats(ctx context.Context, userID int, judulAlamat string) ([]alamatmodel.Alamat, error) {
+	alamats, err := s.AlamatRepository.GetAlamats(ctx, userID, judulAlamat)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get alamats: %v", err)
 	}

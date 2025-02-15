@@ -32,10 +32,6 @@ func (d *Dependency) AdminMiddleware(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.MiddlewareFailedMessage, err.Error(), nil)
 	}
 
-	if user == nil {
-		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.MiddlewareFailedMessage, "user not exists", nil)
-	}
-
 	if !user.IsAdmin {
 		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.MiddlewareFailedMessage, constants.NotAuthorizedErr, nil)
 	}

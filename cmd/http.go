@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"net/http"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
 	alamathandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/alamat_handler"
@@ -55,8 +53,6 @@ func ServeHTTP() {
 	api.Get("/toko/:id_toko", dependency.AuthMiddleware, dependency.tokoHandler.GetTokoByID)
 	api.Put("/toko/:id_toko", dependency.AuthMiddleware, dependency.tokoHandler.UpdateToko)
 
-	api.Post("/upload", uploadImages)
-
 	port := helpers.GetEnv("PORT", "8080")
 	app.Listen(":" + port)
 }
@@ -99,27 +95,4 @@ func dependencyInject(db *gorm.DB) Dependency {
 		alamatHandler:  alamatHandler,
 		tokoHandler:    tokoHandler,
 	}
-}
-
-func uploadImages(c *fiber.Ctx) error {
-	form, err := c.MultipartForm()
-	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "Invalid form data"})
-	}
-
-	files := form.File["images"]
-	if len(files) == 0 {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "No files uploaded"})
-	}
-
-	var urls []string
-	for _, file := range files {
-		url, err := helpers.UploadToS3(file)
-		if err != nil {
-			return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
-		}
-		urls = append(urls, url)
-	}
-
-	return c.JSON(fiber.Map{"urls": urls})
 }

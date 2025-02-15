@@ -77,7 +77,7 @@ func (h *TokoHandler) GetTokoByID(ctx *fiber.Ctx) error {
 }
 
 func (h *TokoHandler) UpdateToko(ctx *fiber.Ctx) error {
-	_, ok := ctx.Locals("userID").(int)
+	userID, ok := ctx.Locals("userID").(int)
 	if !ok {
 		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.FailedUpdateMessage, constants.InvalidUserIDErr, nil)
 	}
@@ -86,6 +86,15 @@ func (h *TokoHandler) UpdateToko(ctx *fiber.Ctx) error {
 	tokoID, err := strconv.Atoi(tokoIDString)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedUpdateMessage, err.Error(), nil)
+	}
+
+	tokoDB, err := h.TokoService.GetTokoByID(ctx.Context(), tokoID)
+	if err != nil {
+		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedUpdateMessage, err.Error(), nil)
+	}
+
+	if tokoDB.IdUser != userID {
+		return helpers.SendResponse(ctx, fiber.StatusForbidden, false, constants.FailedDeleteMessage, constants.NotAuthorizedErr, nil)
 	}
 
 	name := ctx.FormValue("nama_toko")

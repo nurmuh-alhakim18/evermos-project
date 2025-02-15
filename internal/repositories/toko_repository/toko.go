@@ -21,7 +21,7 @@ func (r *TokoRepository) GetTokos(ctx context.Context, nama string, offset, limi
 	query := r.DB.WithContext(ctx).Limit(limit).Offset(offset)
 
 	if nama != "" {
-		query = query.Where("LOWER(nama_toko) = LOWER(?)", nama)
+		query = query.Where("LOWER(nama_toko) LIKE LOWER(?)", "%"+nama+"%")
 	}
 
 	err := query.Find(&tokos).Error

@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/nurmuh-alhakim18/evermos-project/constants"
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
 	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
 )
@@ -19,20 +20,20 @@ func (h *WilayahHandler) GetProvinces(ctx *fiber.Ctx) error {
 
 	page, err := strconv.Atoi(pageString)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
 	limit, err := strconv.Atoi(limitString)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
 	provinces, err := h.WilayahService.GetProvincies(ctx.Context(), search, page, limit)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, "Succeed to GET data", nil, provinces)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedGetMessage, nil, provinces)
 }
 
 func (h *WilayahHandler) GetCities(ctx *fiber.Ctx) error {
@@ -40,10 +41,10 @@ func (h *WilayahHandler) GetCities(ctx *fiber.Ctx) error {
 
 	cities, err := h.WilayahService.GetCities(ctx.Context(), provID)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, "Succeed to GET data", nil, cities)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedGetMessage, nil, cities)
 }
 
 func (h *WilayahHandler) GetProvinceDetail(ctx *fiber.Ctx) error {
@@ -51,10 +52,10 @@ func (h *WilayahHandler) GetProvinceDetail(ctx *fiber.Ctx) error {
 
 	province, err := h.WilayahService.GetProvinceDetail(ctx.Context(), provID)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, "Succeed to GET data", nil, province)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedGetMessage, nil, province)
 }
 
 func (h *WilayahHandler) GetCityDetail(ctx *fiber.Ctx) error {
@@ -62,8 +63,8 @@ func (h *WilayahHandler) GetCityDetail(ctx *fiber.Ctx) error {
 
 	city, err := h.WilayahService.GetCityDetail(ctx.Context(), cityID)
 	if err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, "Failed to GET data", err.Error(), nil)
+		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, "Succeed to GET data", nil, city)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedGetMessage, nil, city)
 }

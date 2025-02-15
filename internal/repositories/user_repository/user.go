@@ -12,8 +12,13 @@ type UserRepository struct {
 	DB *gorm.DB
 }
 
-func (r *UserRepository) CreateUser(ctx context.Context, user *usermodel.User) error {
-	return r.DB.WithContext(ctx).Create(user).Error
+func (r *UserRepository) CreateUser(ctx context.Context, req *usermodel.User) (*usermodel.User, error) {
+	err := r.DB.WithContext(ctx).Create(req).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 func (r *UserRepository) GetUser(ctx context.Context, phoneNumber, email string) (*usermodel.User, error) {

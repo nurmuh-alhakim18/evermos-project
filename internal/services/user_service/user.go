@@ -6,8 +6,10 @@ import (
 	"fmt"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
+	tokointerface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/toko_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
 	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
+	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
 	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -15,6 +17,7 @@ import (
 type UserService struct {
 	UserRepository    userinterface.UserRepositoryInterface
 	WilayahRepository wilayahinterface.WilayahRepositoryInterface
+	TokoRepository    tokointerface.TokoRepositoryInterface
 }
 
 func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
@@ -42,9 +45,16 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 
 	newUser.TanggalLahir = date.String()
 
-	err = s.UserRepository.CreateUser(ctx, &newUser)
+	user, err = s.UserRepository.CreateUser(ctx, &newUser)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %v", err)
+	}
+
+	namaToko := fmt.Sprintf("Toko %s", user.Nama)
+	reqToko := tokomodel.Toko{IdUser: user.ID, NamaToko: namaToko}
+	err = s.TokoRepository.CreateToko(ctx, &reqToko)
+	if err != nil {
+		return fmt.Errorf("failed to create toko: %v", err)
 	}
 
 	return nil

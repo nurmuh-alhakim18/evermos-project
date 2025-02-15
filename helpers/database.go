@@ -5,6 +5,7 @@ import (
 	"log"
 
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
+	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
 	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -35,5 +36,5 @@ func LoadDatabase() {
 
 	log.Println("Connected to database")
 
-	DB.AutoMigrate(&usermodel.User{}, &alamatmodel.Alamat{})
+	DB.AutoMigrate(&usermodel.User{}, &alamatmodel.Alamat{}, &tokomodel.Toko{})
 }

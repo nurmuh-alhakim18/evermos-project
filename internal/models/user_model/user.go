@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
+	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
 )
 
 type User struct {
@@ -21,6 +22,7 @@ type User struct {
 	IdKota       string               `json:"id_kota" gorm:"type:varchar(255)"`
 	IsAdmin      bool                 `json:"-"`
 	Alamats      []alamatmodel.Alamat `json:"-" gorm:"foreignKey:IdUser"`
+	Toko         tokomodel.Toko       `json:"-" gorm:"foreignKey:IdUser"`
 	UpdatedAt    time.Time            `json:"-"`
 	CreatedAt    time.Time            `json:"-"`
 }

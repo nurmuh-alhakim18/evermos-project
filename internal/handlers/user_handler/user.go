@@ -75,10 +75,10 @@ func (h *UserHandler) UpdateUser(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedUpdateMessage, err.Error(), nil)
 	}
 
-	user, err := h.UserService.UpdateUser(ctx.Context(), userID, req)
+	err := h.UserService.UpdateUser(ctx.Context(), userID, req)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedUpdateMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedUpdateMessage, nil, user)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedUpdateMessage, nil, constants.SucceedUpdateData)
 }

@@ -2,7 +2,6 @@ package userservice
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
@@ -21,13 +20,9 @@ type UserService struct {
 }
 
 func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
-	user, err := s.UserRepository.GetUser(ctx, req.NoTelp, req.Email)
-	if err != nil {
-		return fmt.Errorf("failed to check if user exists: %v", err)
-	}
-
-	if user != nil {
-		return errors.New("user already exists")
+	_, err := s.UserRepository.GetUser(ctx, req.NoTelp, req.Email)
+	if err == nil {
+		return fmt.Errorf("user already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.KataSandi), bcrypt.DefaultCost)
@@ -45,7 +40,7 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 
 	newUser.TanggalLahir = date.String()
 
-	user, err = s.UserRepository.CreateUser(ctx, &newUser)
+	user, err := s.UserRepository.CreateUser(ctx, &newUser)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %v", err)
 	}
@@ -64,10 +59,6 @@ func (s *UserService) Login(ctx context.Context, req usermodel.LoginRequest) (*u
 	user, err := s.UserRepository.GetUserByPhone(ctx, req.NoTelp)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user: %v", err)
-	}
-
-	if user == nil {
-		return nil, fmt.Errorf("user not exists: %v", err)
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.KataSandi), []byte(req.KataSandi))
@@ -115,10 +106,6 @@ func (s *UserService) GetProfile(ctx context.Context, userID int) (*usermodel.Us
 		return nil, fmt.Errorf("failed to get user: %v", err)
 	}
 
-	if user == nil {
-		return nil, fmt.Errorf("user not exists: %v", err)
-	}
-
 	date, err := helpers.BirthDateToIndoFormat(user.TanggalLahir)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert birth date: %v", err)
@@ -129,23 +116,19 @@ func (s *UserService) GetProfile(ctx context.Context, userID int) (*usermodel.Us
 	return user, nil
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, userID int, req usermodel.UpdateUser) (*usermodel.UpdateUser, error) {
+func (s *UserService) UpdateUser(ctx context.Context, userID int, req usermodel.UpdateUser) error {
 	date, err := helpers.ParseBirthDate(req.TanggalLahir)
 	if err != nil {
-		return nil, fmt.Errorf("failed to convert birth date: %v", err)
+		return fmt.Errorf("failed to convert birth date: %v", err)
 	}
 
 	userUpdate := req
 	userUpdate.TanggalLahir = date.String()
 
-	user, err := s.UserRepository.UpdateUser(ctx, userID, userUpdate)
+	err = s.UserRepository.UpdateUser(ctx, userID, userUpdate)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update user: %v", err)
+		return fmt.Errorf("failed to update user: %v", err)
 	}
 
-	if user == nil {
-		return nil, fmt.Errorf("user not exists: %v", err)
-	}
-
-	return user, nil
+	return nil
 }

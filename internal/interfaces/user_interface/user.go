@@ -12,7 +12,7 @@ type UserRepositoryInterface interface {
 	GetUser(ctx context.Context, phoneNumber, email string) (*usermodel.User, error)
 	GetUserByPhone(ctx context.Context, phoneNumber string) (*usermodel.User, error)
 	GetUserByID(ctx context.Context, userID int) (*usermodel.User, error)
-	UpdateUser(ctx context.Context, userID int, userInput usermodel.UpdateUser) (*usermodel.UpdateUser, error)
+	UpdateUser(ctx context.Context, userID int, userInput usermodel.UpdateUser) error
 }
 
 type UserServiceInterface interface {
@@ -20,7 +20,7 @@ type UserServiceInterface interface {
 	Login(ctx context.Context, req usermodel.LoginRequest) (*usermodel.LoginResponse, error)
 
 	GetProfile(ctx context.Context, userID int) (*usermodel.User, error)
-	UpdateUser(ctx context.Context, userID int, req usermodel.UpdateUser) (*usermodel.UpdateUser, error)
+	UpdateUser(ctx context.Context, userID int, req usermodel.UpdateUser) error
 }
 
 type UserHandlerInterface interface {

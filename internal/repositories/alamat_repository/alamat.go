@@ -2,7 +2,6 @@ package alamatrepository
 
 import (
 	"context"
-	"errors"
 
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
 	"gorm.io/gorm"
@@ -12,11 +11,16 @@ type AlamatRepository struct {
 	DB *gorm.DB
 }
 
-func (r *AlamatRepository) CreateAlamat(ctx context.Context, alamat *alamatmodel.Alamat) error {
-	return r.DB.WithContext(ctx).Create(alamat).Error
+func (r *AlamatRepository) CreateAlamat(ctx context.Context, alamat *alamatmodel.Alamat) (*int, error) {
+	err := r.DB.WithContext(ctx).Create(alamat).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &alamat.ID, nil
 }
 
-func (r *AlamatRepository) GetAlamat(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
+func (r *AlamatRepository) GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
 	var alamats []alamatmodel.Alamat
 	err := r.DB.WithContext(ctx).Where("id_user = ?", userID).Find(&alamats).Error
 	if err != nil {
@@ -30,38 +34,25 @@ func (r *AlamatRepository) GetAlamatByID(ctx context.Context, alamatID int) (*al
 	var alamat alamatmodel.Alamat
 	err := r.DB.WithContext(ctx).First(&alamat, alamatID).Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-
 		return nil, err
 	}
 
 	return &alamat, nil
 }
 
-func (r *AlamatRepository) UpdateAlamat(ctx context.Context, alamatID int, alamatInput alamatmodel.UpdateAlamat) (*alamatmodel.UpdateAlamat, error) {
+func (r *AlamatRepository) UpdateAlamat(ctx context.Context, alamatID int, alamatInput alamatmodel.UpdateAlamat) error {
 	var alamat alamatmodel.Alamat
 	err := r.DB.WithContext(ctx).First(&alamat, alamatID).Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-
-		return nil, err
+		return err
 	}
 
 	err = r.DB.WithContext(ctx).Model(&alamat).Updates(alamatInput).Error
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &alamatmodel.UpdateAlamat{
-		JudulAlamat:  alamat.JudulAlamat,
-		NamaPenerima: alamat.NamaPenerima,
-		NoTelp:       alamat.NoTelp,
-		DetailAlamat: alamat.DetailAlamat,
-	}, nil
+	return nil
 }
 
 func (r *AlamatRepository) DeleteAlamat(ctx context.Context, alamatID int) error {

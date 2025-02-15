@@ -45,7 +45,7 @@ func ServeHTTP() {
 	api.Get("/user", dependency.AuthMiddleware, dependency.userHandler.GetProfile)
 	api.Put("/user", dependency.AuthMiddleware, dependency.userHandler.UpdateUser)
 	api.Post("/user/alamat", dependency.AuthMiddleware, dependency.alamatHandler.CreateAlamat)
-	api.Get("/user/alamat", dependency.AuthMiddleware, dependency.alamatHandler.GetAlamat)
+	api.Get("/user/alamat", dependency.AuthMiddleware, dependency.alamatHandler.GetAlamats)
 	api.Get("/user/alamat/:id", dependency.AuthMiddleware, dependency.alamatHandler.GetAlamatByID)
 	api.Put("/user/alamat/:id", dependency.AuthMiddleware, dependency.alamatHandler.UpdateAlamat)
 	api.Delete("/user/alamat/:id", dependency.AuthMiddleware, dependency.alamatHandler.DeleteAlamat)

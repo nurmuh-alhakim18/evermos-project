@@ -33,21 +33,21 @@ func (h *AlamatHandler) CreateAlamat(ctx *fiber.Ctx) error {
 	newAlamat := req
 	newAlamat.IdUser = userID
 
-	err := h.AlamatService.CreateAlamat(ctx.Context(), newAlamat)
+	alamatID, err := h.AlamatService.CreateAlamat(ctx.Context(), newAlamat)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedPostMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedPostMessage, nil, constants.SucceedCreateData)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedPostMessage, nil, alamatID)
 }
 
-func (h *AlamatHandler) GetAlamat(ctx *fiber.Ctx) error {
+func (h *AlamatHandler) GetAlamats(ctx *fiber.Ctx) error {
 	userID, ok := ctx.Locals("userID").(int)
 	if !ok {
 		return helpers.SendResponse(ctx, fiber.StatusUnauthorized, false, constants.FailedGetMessage, constants.InvalidUserIDErr, nil)
 	}
 
-	alamats, err := h.AlamatService.GetAlamat(ctx.Context(), userID)
+	alamats, err := h.AlamatService.GetAlamats(ctx.Context(), userID)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedGetMessage, err.Error(), nil)
 	}
@@ -106,12 +106,12 @@ func (h *AlamatHandler) UpdateAlamat(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusForbidden, false, constants.FailedUpdateMessage, constants.NotAuthorizedErr, nil)
 	}
 
-	alamat, err := h.AlamatService.UpdateAlamat(ctx.Context(), alamatID, req)
+	err = h.AlamatService.UpdateAlamat(ctx.Context(), alamatID, req)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedUpdateMessage, err.Error(), nil)
 	}
 
-	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedUpdateMessage, nil, alamat)
+	return helpers.SendResponse(ctx, fiber.StatusOK, true, constants.SucceedUpdateMessage, nil, constants.SucceedUpdateData)
 }
 
 func (h *AlamatHandler) DeleteAlamat(ctx *fiber.Ctx) error {

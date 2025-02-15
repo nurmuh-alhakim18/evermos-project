@@ -12,17 +12,17 @@ type AlamatService struct {
 	AlamatRepository alamatinterface.AlamatRepositoryInterface
 }
 
-func (s *AlamatService) CreateAlamat(ctx context.Context, req alamatmodel.Alamat) error {
-	err := s.AlamatRepository.CreateAlamat(ctx, &req)
+func (s *AlamatService) CreateAlamat(ctx context.Context, req alamatmodel.Alamat) (*int, error) {
+	alamatID, err := s.AlamatRepository.CreateAlamat(ctx, &req)
 	if err != nil {
-		return fmt.Errorf("failed to create alamat: %v", err)
+		return nil, fmt.Errorf("failed to create alamat: %v", err)
 	}
 
-	return nil
+	return alamatID, nil
 }
 
-func (s *AlamatService) GetAlamat(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
-	alamats, err := s.AlamatRepository.GetAlamat(ctx, userID)
+func (s *AlamatService) GetAlamats(ctx context.Context, userID int) ([]alamatmodel.Alamat, error) {
+	alamats, err := s.AlamatRepository.GetAlamats(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get alamats: %v", err)
 	}
@@ -33,27 +33,19 @@ func (s *AlamatService) GetAlamat(ctx context.Context, userID int) ([]alamatmode
 func (s *AlamatService) GetAlamatByID(ctx context.Context, alamatID int) (*alamatmodel.Alamat, error) {
 	alamat, err := s.AlamatRepository.GetAlamatByID(ctx, alamatID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get alamats: %v", err)
-	}
-
-	if alamat == nil {
-		return nil, fmt.Errorf("alamat not exists: %v", err)
+		return nil, fmt.Errorf("failed to get alamat: %v", err)
 	}
 
 	return alamat, nil
 }
 
-func (s *AlamatService) UpdateAlamat(ctx context.Context, alamatID int, req alamatmodel.UpdateAlamat) (*alamatmodel.UpdateAlamat, error) {
-	alamat, err := s.AlamatRepository.UpdateAlamat(ctx, alamatID, req)
+func (s *AlamatService) UpdateAlamat(ctx context.Context, alamatID int, req alamatmodel.UpdateAlamat) error {
+	err := s.AlamatRepository.UpdateAlamat(ctx, alamatID, req)
 	if err != nil {
-		return nil, fmt.Errorf("failed to update alamat: %v", err)
+		return fmt.Errorf("failed to update alamat: %v", err)
 	}
 
-	if alamat == nil {
-		return nil, fmt.Errorf("alamat not exists: %v", err)
-	}
-
-	return alamat, nil
+	return nil
 }
 
 func (s *AlamatService) DeleteAlamat(ctx context.Context, alamatID int) error {

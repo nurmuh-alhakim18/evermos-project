@@ -3,8 +3,6 @@ package tokomodel
 import (
 	"mime/multipart"
 	"time"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type Toko struct {
@@ -18,11 +16,6 @@ type Toko struct {
 
 func (Toko) TableName() string {
 	return "tokos"
-}
-
-func (s Toko) Validate() error {
-	v := validator.New()
-	return v.Struct(s)
 }
 
 type UpdateTokoReq struct {

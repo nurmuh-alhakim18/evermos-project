@@ -26,10 +26,6 @@ func (h *AlamatHandler) CreateAlamat(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
 	}
 
-	if err := req.Validate(); err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
-	}
-
 	newAlamat := req
 	newAlamat.IdUser = userID
 

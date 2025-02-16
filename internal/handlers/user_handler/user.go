@@ -19,10 +19,6 @@ func (h *UserHandler) Register(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
 	}
 
-	if err := req.Validate(); err != nil {
-		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
-	}
-
 	err := h.UserService.Register(ctx.Context(), req)
 	if err != nil {
 		return helpers.SendResponse(ctx, fiber.StatusInternalServerError, false, constants.FailedPostMessage, err.Error(), nil)

@@ -2,8 +2,6 @@ package alamatmodel
 
 import (
 	"time"
-
-	"github.com/go-playground/validator/v10"
 )
 
 type Alamat struct {
@@ -19,11 +17,6 @@ type Alamat struct {
 
 func (Alamat) TableName() string {
 	return "alamats"
-}
-
-func (s Alamat) Validate() error {
-	v := validator.New()
-	return v.Struct(s)
 }
 
 type UpdateAlamat struct {

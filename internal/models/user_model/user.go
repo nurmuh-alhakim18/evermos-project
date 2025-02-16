@@ -3,7 +3,6 @@ package usermodel
 import (
 	"time"
 
-	"github.com/go-playground/validator/v10"
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
 	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
 )
@@ -29,11 +28,6 @@ type User struct {
 
 func (User) TableName() string {
 	return "users"
-}
-
-func (s User) Validate() error {
-	v := validator.New()
-	return v.Struct(s)
 }
 
 type LoginRequest struct {

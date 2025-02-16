@@ -53,12 +53,7 @@ func (r *AlamatRepository) UpdateAlamat(ctx context.Context, alamatID int, alama
 		return err
 	}
 
-	err = r.DB.WithContext(ctx).Model(&alamat).Updates(alamatInput).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return r.DB.WithContext(ctx).Model(&alamat).Updates(alamatInput).Error
 }
 
 func (r *AlamatRepository) DeleteAlamat(ctx context.Context, alamatID int) error {

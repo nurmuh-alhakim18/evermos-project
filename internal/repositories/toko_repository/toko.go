@@ -61,10 +61,5 @@ func (r *TokoRepository) UpdateToko(ctx context.Context, tokoID int, tokoInput t
 		return err
 	}
 
-	err = r.DB.WithContext(ctx).Model(&toko).Updates(tokoInput).Error
-	if err != nil {
-		return nil
-	}
-
-	return nil
+	return r.DB.WithContext(ctx).Model(&toko).Updates(tokoInput).Error
 }

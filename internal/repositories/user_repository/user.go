@@ -57,10 +57,5 @@ func (r *UserRepository) UpdateUser(ctx context.Context, userID int, userInput u
 		return err
 	}
 
-	err = r.DB.WithContext(ctx).Model(&user).Updates(userInput).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return r.DB.WithContext(ctx).Model(&user).Updates(userInput).Error
 }

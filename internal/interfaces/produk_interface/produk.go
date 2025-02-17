@@ -16,10 +16,10 @@ type ProdukRepositoryInterface interface {
 }
 
 type ProdukServiceInterface interface {
-	CreateProduk(ctx context.Context, userID int, req produkmodel.Produk) (*int, error)
+	CreateProduk(ctx context.Context, userID int, req produkmodel.ProdukReq) (*int, error)
 	GetProduks(ctx context.Context, queries produkmodel.GetProdukQueries) ([]produkmodel.GetProdukResp, error)
 	GetProdukByID(ctx context.Context, produkID int) (*produkmodel.GetProdukResp, error)
-	UpdateProduk(ctx context.Context, produkID int, req produkmodel.UpdateProduk) error
+	UpdateProduk(ctx context.Context, produkID int, req produkmodel.ProdukReq) error
 	DeleteProduk(ctx context.Context, produkID int) error
 }
 

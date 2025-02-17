@@ -5,6 +5,7 @@ import (
 	"log"
 
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
+	fotoprodukmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/foto_produk_model"
 	kategorimodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/kategori_model"
 	produkmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/produk_model"
 	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
@@ -38,5 +39,12 @@ func LoadDatabase() {
 
 	log.Println("Connected to database")
 
-	DB.AutoMigrate(&usermodel.User{}, &alamatmodel.Alamat{}, &tokomodel.Toko{}, &kategorimodel.Kategori{}, &produkmodel.Produk{})
+	DB.AutoMigrate(
+		&usermodel.User{},
+		&alamatmodel.Alamat{},
+		&tokomodel.Toko{},
+		&kategorimodel.Kategori{},
+		&produkmodel.Produk{},
+		&fotoprodukmodel.FotoProduk{},
+	)
 }

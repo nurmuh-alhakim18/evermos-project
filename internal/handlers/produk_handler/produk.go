@@ -33,6 +33,7 @@ func (h *ProdukHandler) CreateProduk(ctx *fiber.Ctx) error {
 	hargaKonsumen := form.Value["harga_konsumen"][0]
 	stokString := form.Value["stok"][0]
 	deskripsi := form.Value["deskripsi"][0]
+	photos := form.File["photos"]
 
 	categoryID, err := strconv.Atoi(categoryIDString)
 	if err != nil {
@@ -44,13 +45,14 @@ func (h *ProdukHandler) CreateProduk(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
 	}
 
-	req := produkmodel.Produk{
+	req := produkmodel.ProdukReq{
 		NamaProduk:    namaProduk,
 		HargaReseller: hargaReseller,
 		HargaKonsumen: hargaKonsumen,
 		Stok:          stok,
 		Deskripsi:     deskripsi,
 		IdKategori:    categoryID,
+		Photos:        photos,
 	}
 
 	produkID, err := h.ProdukService.CreateProduk(ctx.Context(), userID, req)
@@ -196,6 +198,8 @@ func (h *ProdukHandler) UpdateProduk(ctx *fiber.Ctx) error {
 		deskripsi = deskripsiForm[0]
 	}
 
+	photos := form.File["photos"]
+
 	var categoryID int
 	var stok int
 	if categoryIDString != "" {
@@ -212,13 +216,14 @@ func (h *ProdukHandler) UpdateProduk(ctx *fiber.Ctx) error {
 		}
 	}
 
-	req := produkmodel.UpdateProduk{
+	req := produkmodel.ProdukReq{
 		NamaProduk:    namaProduk,
 		HargaReseller: hargaReseller,
 		HargaKonsumen: hargaKonsumen,
 		Stok:          stok,
 		Deskripsi:     deskripsi,
 		IdKategori:    categoryID,
+		Photos:        photos,
 	}
 
 	err = h.ProdukService.UpdateProduk(ctx.Context(), produkID, req)

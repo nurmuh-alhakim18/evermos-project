@@ -71,6 +71,23 @@ func UploadToS3(file *multipart.FileHeader) (string, error) {
 	return fileURL, nil
 }
 
+func DeleteFromS3(url string) error {
+	urlParts := strings.SplitN(url, "com/", 2)
+	key := urlParts[1]
+	bucketName := GetEnv("BUCKET_NAME", "")
+
+	_, err := S3Client.DeleteObject(context.TODO(), &s3.DeleteObjectInput{
+		Bucket: &bucketName,
+		Key:    &key,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func validateFile(file *multipart.FileHeader) error {
 	if file.Size > MaxFileSize {
 		return fmt.Errorf("file size exceeds %dMB", MaxFileSize)

@@ -14,9 +14,9 @@ import (
 )
 
 type UserService struct {
-	UserRepository    userinterface.UserRepositoryInterface
-	WilayahRepository wilayahinterface.WilayahRepositoryInterface
-	TokoRepository    tokointerface.TokoRepositoryInterface
+	UserRepository userinterface.UserRepositoryInterface
+	WilayahService wilayahinterface.WilayahServiceInterface
+	TokoService    tokointerface.TokoServiceInterface
 }
 
 func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
@@ -47,7 +47,7 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 
 	namaToko := fmt.Sprintf("Toko %s", user.Nama)
 	reqToko := tokomodel.Toko{IdUser: user.ID, NamaToko: namaToko}
-	err = s.TokoRepository.CreateToko(ctx, &reqToko)
+	err = s.TokoService.CreateToko(ctx, reqToko)
 	if err != nil {
 		return fmt.Errorf("failed to create toko: %v", err)
 	}
@@ -76,12 +76,12 @@ func (s *UserService) Login(ctx context.Context, req usermodel.LoginRequest) (*u
 		return nil, fmt.Errorf("failed to generate token: %v", err)
 	}
 
-	provinsi, err := s.WilayahRepository.GetProvinceDetail(ctx, user.IdProvinsi)
+	provinsi, err := s.WilayahService.GetProvinceDetail(ctx, user.IdProvinsi)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get province: %v", err)
 	}
 
-	kota, err := s.WilayahRepository.GetCityDetail(ctx, user.IdKota)
+	kota, err := s.WilayahService.GetCityDetail(ctx, user.IdKota)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get city: %v", err)
 	}

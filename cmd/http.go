@@ -102,7 +102,7 @@ func dependencyInject(db *gorm.DB) Dependency {
 	tokoHandler := &tokohandler.TokoHandler{TokoService: tokoSvc}
 
 	userRepo := &userrepository.UserRepository{DB: db}
-	userSvc := &userservice.UserService{UserRepository: userRepo, WilayahRepository: wilayahRepo, TokoRepository: tokoRepo}
+	userSvc := &userservice.UserService{UserRepository: userRepo, WilayahService: wilayahSvc, TokoService: tokoSvc}
 	userHandler := &userhandler.UserHandler{UserService: userSvc}
 
 	alamatRepo := &alamatrepository.AlamatRepository{DB: db}

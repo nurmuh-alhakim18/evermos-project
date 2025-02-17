@@ -123,9 +123,18 @@ func (s *UserService) UpdateUser(ctx context.Context, userID int, req usermodel.
 		return fmt.Errorf("failed to convert birth date: %v", err)
 	}
 
+	var hashedPassword []byte
+	if req.KataSandi != "" {
+		hashedPassword, err = bcrypt.GenerateFromPassword([]byte(req.KataSandi), bcrypt.DefaultCost)
+		if err != nil {
+			return fmt.Errorf("failed to hash password: %v", err)
+		}
+	}
+
 	userUpdate := req
 	userUpdate.TanggalLahir = date.String()
 	userUpdate.UpdatedAt = time.Now()
+	userUpdate.KataSandi = string(hashedPassword)
 
 	err = s.UserRepository.UpdateUser(ctx, userID, userUpdate)
 	if err != nil {

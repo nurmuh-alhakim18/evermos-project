@@ -3,6 +3,7 @@ package alamatservice
 import (
 	"context"
 	"fmt"
+	"time"
 
 	alamatinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/alamat_interface"
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
@@ -40,7 +41,9 @@ func (s *AlamatService) GetAlamatByID(ctx context.Context, alamatID int) (*alama
 }
 
 func (s *AlamatService) UpdateAlamat(ctx context.Context, alamatID int, req alamatmodel.UpdateAlamat) error {
-	err := s.AlamatRepository.UpdateAlamat(ctx, alamatID, req)
+	alamat := req
+	alamat.UpdatedAt = time.Now()
+	err := s.AlamatRepository.UpdateAlamat(ctx, alamatID, alamat)
 	if err != nil {
 		return fmt.Errorf("failed to update alamat: %v", err)
 	}

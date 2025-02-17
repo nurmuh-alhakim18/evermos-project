@@ -19,5 +19,6 @@ func (Kategori) TableName() string {
 }
 
 type UpdateKategori struct {
-	NamaKategori string `json:"nama_category"`
+	NamaKategori string    `json:"nama_category"`
+	UpdatedAt    time.Time `json:"-"`
 }

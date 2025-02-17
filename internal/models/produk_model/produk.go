@@ -60,11 +60,12 @@ type Kategori struct {
 }
 
 type UpdateProduk struct {
-	NamaProduk    string `form:"nama_produk"`
-	Slug          string `form:"slug"`
-	HargaReseller string `form:"harga_reseller"`
-	HargaKonsumen string `form:"harga_konsumen"`
-	Stok          int    `json:"stok" form:"stok"`
-	Deskripsi     string `json:"deskripsi" form:"stok" gorm:"type:text"`
-	IdKategori    int    `form:"category_id"`
+	NamaProduk    string    `form:"nama_produk"`
+	Slug          string    `form:"slug"`
+	HargaReseller string    `form:"harga_reseller"`
+	HargaKonsumen string    `form:"harga_konsumen"`
+	Stok          int       `json:"stok" form:"stok"`
+	Deskripsi     string    `json:"deskripsi" form:"stok" gorm:"type:text"`
+	IdKategori    int       `form:"category_id"`
+	UpdatedAt     time.Time `json:"-"`
 }

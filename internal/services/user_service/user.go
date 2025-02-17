@@ -3,6 +3,7 @@ package userservice
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
 	tokointerface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/toko_interface"
@@ -124,6 +125,7 @@ func (s *UserService) UpdateUser(ctx context.Context, userID int, req usermodel.
 
 	userUpdate := req
 	userUpdate.TanggalLahir = date.String()
+	userUpdate.UpdatedAt = time.Now()
 
 	err = s.UserRepository.UpdateUser(ctx, userID, userUpdate)
 	if err != nil {

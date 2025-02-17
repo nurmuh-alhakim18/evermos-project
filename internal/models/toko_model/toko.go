@@ -27,6 +27,7 @@ type UpdateTokoReq struct {
 }
 
 type UpdateToko struct {
-	NamaToko string
-	URLFoto  string
+	NamaToko  string
+	URLFoto   string
+	UpdatedAt time.Time
 }

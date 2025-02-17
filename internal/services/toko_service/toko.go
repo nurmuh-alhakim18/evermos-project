@@ -3,6 +3,7 @@ package tokoservice
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
 	tokointerface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/toko_interface"
@@ -64,7 +65,7 @@ func (s *TokoService) UpdateToko(ctx context.Context, tokoID int, req tokomodel.
 		}
 	}
 
-	toko := tokomodel.UpdateToko{NamaToko: req.NamaToko, URLFoto: url}
+	toko := tokomodel.UpdateToko{NamaToko: req.NamaToko, URLFoto: url, UpdatedAt: time.Now()}
 
 	err = s.TokoRepository.UpdateToko(ctx, tokoID, toko)
 	if err != nil {

@@ -3,6 +3,7 @@ package kategoriservice
 import (
 	"context"
 	"fmt"
+	"time"
 
 	kategoriinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/kategori_interface"
 	kategorimodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/kategori_model"
@@ -40,7 +41,9 @@ func (s *KategoriService) GetKategoriByID(ctx context.Context, kategoriID int) (
 }
 
 func (s *KategoriService) UpdateKategori(ctx context.Context, kategoriID int, req kategorimodel.UpdateKategori) error {
-	err := s.KategoriRepository.UpdateKategori(ctx, kategoriID, req)
+	kategori := req
+	kategori.UpdatedAt = time.Now()
+	err := s.KategoriRepository.UpdateKategori(ctx, kategoriID, kategori)
 	if err != nil {
 		return fmt.Errorf("failed to update kategori: %v", err)
 	}

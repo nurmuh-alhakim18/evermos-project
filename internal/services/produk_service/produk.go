@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"time"
 
 	kategoriinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/kategori_interface"
 	produkinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/produk_interface"
@@ -121,6 +122,7 @@ func (s *ProdukService) UpdateProduk(ctx context.Context, produkID int, req prod
 
 	produk := req
 	produk.Slug = slug
+	produk.UpdatedAt = time.Now()
 
 	err := s.ProdukRepository.UpdateProduk(ctx, produkID, produk)
 	if err != nil {

@@ -6,23 +6,27 @@ import (
 	alamathandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/alamat_handler"
 	healthhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/health_handler"
 	kategorihandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/kategori_handler"
+	produkhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/produk_handler"
 	tokohandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/toko_handler"
 	userhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/user_handler"
 	wilayahhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/wilayah_handler"
 	alamatinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/alamat_interface"
 	healthinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/health_interface"
 	kategoriinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/kategori_interface"
+	produkinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/produk_interface"
 	tokointerface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/toko_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
 	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
 	alamatrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/alamat_repository"
 	kategorirepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/kategori_repository"
+	produkrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/produk_repository"
 	tokorepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/toko_repository"
 	userrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/user_repository"
 	wilayahrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/wilayah_repository"
 	alamatservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/alamat_service"
 	healthservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/health_service"
 	kategoriservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/kategori_service"
+	produkservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/produk_service"
 	tokoservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/toko_service"
 	userservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/user_service"
 	wilayahservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/wilayah_service"
@@ -38,7 +42,7 @@ func ServeHTTP() {
 
 	api.Post("/category", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.kategoriHandler.CreateKategori)
 	api.Get("/category", dependency.kategoriHandler.GetKategoris)
-	api.Get("/category/:id", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.kategoriHandler.GetKategoriByID)
+	api.Get("/category/:id", dependency.AuthMiddleware, dependency.kategoriHandler.GetKategoriByID)
 	api.Put("/category/:id", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.kategoriHandler.UpdateKategori)
 	api.Delete("/category/:id", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.kategoriHandler.DeleteKategori)
 
@@ -63,6 +67,12 @@ func ServeHTTP() {
 	api.Get("/toko/:id_toko", dependency.AuthMiddleware, dependency.tokoHandler.GetTokoByID)
 	api.Put("/toko/:id_toko", dependency.AuthMiddleware, dependency.tokoHandler.UpdateToko)
 
+	api.Post("/product", dependency.AuthMiddleware, dependency.produkHandler.CreateProduk)
+	api.Get("/product", dependency.produkHandler.GetProduks)
+	api.Get("/product/:id", dependency.produkHandler.GetProdukByID)
+	api.Put("/product/:id", dependency.AuthMiddleware, dependency.produkHandler.UpdateProduk)
+	api.Delete("/product/:id", dependency.AuthMiddleware, dependency.produkHandler.DeleteProduk)
+
 	port := helpers.GetEnv("PORT", "8080")
 	app.Listen(":" + port)
 }
@@ -76,6 +86,7 @@ type Dependency struct {
 	userHandler     userinterface.UserHandlerInterface
 	alamatHandler   alamatinterface.AlamatHandlerInterface
 	kategoriHandler kategoriinterface.KategoriHandlerInterface
+	produkHandler   produkinterface.ProdukHandlerInterface
 }
 
 func dependencyInject(db *gorm.DB) Dependency {
@@ -102,6 +113,17 @@ func dependencyInject(db *gorm.DB) Dependency {
 	kategoriSvc := &kategoriservice.KategoriService{KategoriRepository: kategoriRepo}
 	kategoriHandler := &kategorihandler.KategoriHandler{KategoriService: kategoriSvc}
 
+	produkRepo := &produkrepository.ProdukRepository{DB: db}
+	produkSvc := &produkservice.ProdukService{
+		ProdukRepository: produkRepo,
+		TokoService:      tokoSvc,
+		KategoriService:  kategoriSvc,
+	}
+	produkHandler := &produkhandler.ProdukHandler{
+		ProdukService: produkSvc,
+		TokoService:   tokoSvc,
+	}
+
 	return Dependency{
 		userRepository:  userRepo,
 		healthHandler:   healthHandler,
@@ -110,5 +132,6 @@ func dependencyInject(db *gorm.DB) Dependency {
 		alamatHandler:   alamatHandler,
 		tokoHandler:     tokoHandler,
 		kategoriHandler: kategoriHandler,
+		produkHandler:   produkHandler,
 	}
 }

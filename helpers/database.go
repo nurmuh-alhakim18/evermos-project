@@ -9,6 +9,7 @@ import (
 	kategorimodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/kategori_model"
 	produkmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/produk_model"
 	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
+	trxmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/trx_model"
 	usermodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/user_model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -46,5 +47,6 @@ func LoadDatabase() {
 		&kategorimodel.Kategori{},
 		&produkmodel.Produk{},
 		&fotoprodukmodel.FotoProduk{},
+		&trxmodel.Trx{},
 	)
 }

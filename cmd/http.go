@@ -8,6 +8,7 @@ import (
 	kategorihandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/kategori_handler"
 	produkhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/produk_handler"
 	tokohandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/toko_handler"
+	trxhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/trx_handler"
 	userhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/user_handler"
 	wilayahhandler "github.com/nurmuh-alhakim18/evermos-project/internal/handlers/wilayah_handler"
 	alamatinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/alamat_interface"
@@ -15,6 +16,7 @@ import (
 	kategoriinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/kategori_interface"
 	produkinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/produk_interface"
 	tokointerface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/toko_interface"
+	trxinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/trx_interface"
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
 	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
 	alamatrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/alamat_repository"
@@ -22,6 +24,7 @@ import (
 	kategorirepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/kategori_repository"
 	produkrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/produk_repository"
 	tokorepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/toko_repository"
+	trxrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/trx_repository"
 	userrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/user_repository"
 	wilayahrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/wilayah_repository"
 	alamatservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/alamat_service"
@@ -30,6 +33,7 @@ import (
 	kategoriservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/kategori_service"
 	produkservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/produk_service"
 	tokoservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/toko_service"
+	trxservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/trx_service"
 	userservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/user_service"
 	wilayahservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/wilayah_service"
 	"gorm.io/gorm"
@@ -75,6 +79,10 @@ func ServeHTTP() {
 	api.Put("/product/:id", dependency.AuthMiddleware, dependency.produkHandler.UpdateProduk)
 	api.Delete("/product/:id", dependency.AuthMiddleware, dependency.produkHandler.DeleteProduk)
 
+	api.Post("/trx", dependency.AuthMiddleware, dependency.trxHandler.CreateTrx)
+	api.Get("/trx", dependency.AuthMiddleware, dependency.trxHandler.GetTrxByUserID)
+	api.Get("/trx/:id", dependency.AuthMiddleware, dependency.trxHandler.GetTrxByID)
+
 	port := helpers.GetEnv("PORT", "8080")
 	app.Listen(":" + port)
 }
@@ -89,6 +97,7 @@ type Dependency struct {
 	alamatHandler   alamatinterface.AlamatHandlerInterface
 	kategoriHandler kategoriinterface.KategoriHandlerInterface
 	produkHandler   produkinterface.ProdukHandlerInterface
+	trxHandler      trxinterface.TrxHandlerInterface
 }
 
 func dependencyInject(db *gorm.DB) Dependency {
@@ -130,6 +139,10 @@ func dependencyInject(db *gorm.DB) Dependency {
 		TokoService:   tokoSvc,
 	}
 
+	trxRepo := &trxrepository.TrxRepository{DB: db}
+	trxSvc := &trxservice.TrxService{TrxRepository: trxRepo}
+	trxHandler := &trxhandler.TrxHandler{TrxService: trxSvc}
+
 	return Dependency{
 		userRepository:  userRepo,
 		healthHandler:   healthHandler,
@@ -139,5 +152,6 @@ func dependencyInject(db *gorm.DB) Dependency {
 		tokoHandler:     tokoHandler,
 		kategoriHandler: kategoriHandler,
 		produkHandler:   produkHandler,
+		trxHandler:      trxHandler,
 	}
 }

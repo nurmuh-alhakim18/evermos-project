@@ -5,6 +5,7 @@ import (
 
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
 	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
+	trxmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/trx_model"
 )
 
 type User struct {
@@ -22,6 +23,7 @@ type User struct {
 	IsAdmin      bool                 `json:"-"`
 	Alamats      []alamatmodel.Alamat `json:"-" gorm:"foreignKey:IdUser"`
 	Toko         tokomodel.Toko       `json:"-" gorm:"foreignKey:IdUser"`
+	Trx          trxmodel.Trx         `json:"-" gorm:"foreignKey:IdUser"`
 	UpdatedAt    time.Time            `json:"-"`
 	CreatedAt    time.Time            `json:"-"`
 }

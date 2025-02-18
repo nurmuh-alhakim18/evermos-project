@@ -59,6 +59,17 @@ func (s *TokoService) UpdateToko(ctx context.Context, tokoID int, req tokomodel.
 	)
 
 	if req.Photo != nil {
+		toko, err := s.TokoRepository.GetTokoByID(ctx, tokoID)
+		if err != nil {
+			return fmt.Errorf("failed to get toko: %v", err)
+		}
+
+		fotoURL := toko.URLFoto
+		err = helpers.DeleteFromS3(fotoURL)
+		if err != nil {
+			return fmt.Errorf("failed to delete foto: %v", err)
+		}
+
 		url, err = helpers.UploadToS3(req.Photo)
 		if err != nil {
 			return err

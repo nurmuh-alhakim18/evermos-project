@@ -3,6 +3,7 @@ package userservice
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
@@ -26,6 +27,7 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 		return fmt.Errorf("user already exists")
 	}
 
+	log.Println(req.KataSandi)
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.KataSandi), bcrypt.DefaultCost)
 	if err != nil {
 		return fmt.Errorf("failed to hash password: %v", err)
@@ -39,7 +41,7 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 		return fmt.Errorf("failed to parse date: %v", err)
 	}
 
-	newUser.TanggalLahir = date.String()
+	newUser.TanggalLahir = date
 
 	user, err := s.UserRepository.CreateUser(ctx, &newUser)
 	if err != nil {
@@ -132,7 +134,7 @@ func (s *UserService) UpdateUser(ctx context.Context, userID int, req usermodel.
 	}
 
 	userUpdate := req
-	userUpdate.TanggalLahir = date.String()
+	userUpdate.TanggalLahir = date
 	userUpdate.UpdatedAt = time.Now()
 	userUpdate.KataSandi = string(hashedPassword)
 

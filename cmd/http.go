@@ -20,17 +20,21 @@ import (
 	userinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/user_interface"
 	wilayahinterface "github.com/nurmuh-alhakim18/evermos-project/internal/interfaces/wilayah_interface"
 	alamatrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/alamat_repository"
+	detailtrxrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/detail_trx_repository"
 	fotoprodukrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/foto_produk_repository"
 	kategorirepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/kategori_repository"
+	logprodukrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/log_produk_repository"
 	produkrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/produk_repository"
 	tokorepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/toko_repository"
 	trxrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/trx_repository"
 	userrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/user_repository"
 	wilayahrepository "github.com/nurmuh-alhakim18/evermos-project/internal/repositories/wilayah_repository"
 	alamatservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/alamat_service"
+	detailtrxservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/detail_trx_service"
 	fotoprodukservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/foto_produk_service"
 	healthservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/health_service"
 	kategoriservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/kategori_service"
+	logprodukservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/log_produk_service"
 	produkservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/produk_service"
 	tokoservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/toko_service"
 	trxservice "github.com/nurmuh-alhakim18/evermos-project/internal/services/trx_service"
@@ -139,8 +143,23 @@ func dependencyInject(db *gorm.DB) Dependency {
 		TokoService:   tokoSvc,
 	}
 
+	logProdukRepo := &logprodukrepository.LogProdukRepository{DB: db}
+	logProdukSvc := &logprodukservice.LogProdukService{LogProdukRepository: logProdukRepo}
+
+	detailTrxRepo := &detailtrxrepository.DetailTrxRepository{DB: db}
+	detailTrxSvc := &detailtrxservice.DetailTrxService{DetailTrxRepository: detailTrxRepo}
+
 	trxRepo := &trxrepository.TrxRepository{DB: db}
-	trxSvc := &trxservice.TrxService{TrxRepository: trxRepo}
+	trxSvc := &trxservice.TrxService{
+		TrxRepository:     trxRepo,
+		AlamatService:     alamatSvc,
+		ProductService:    produkSvc,
+		LogProductService: logProdukSvc,
+		DetailTrxService:  detailTrxSvc,
+		TokoService:       tokoSvc,
+		KategoriService:   kategoriSvc,
+		FotoProdukService: fotoProdukSvc,
+	}
 	trxHandler := &trxhandler.TrxHandler{TrxService: trxSvc}
 
 	return Dependency{

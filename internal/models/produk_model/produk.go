@@ -5,6 +5,7 @@ import (
 	"time"
 
 	fotoprodukmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/foto_produk_model"
+	logprodukmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/log_produk_model"
 )
 
 type Produk struct {
@@ -18,6 +19,7 @@ type Produk struct {
 	IdToko        int                          `json:"-"`
 	IdKategori    int                          `json:"-" form:"category_id"`
 	FotoProduk    []fotoprodukmodel.FotoProduk `json:"-" gorm:"foreignKey:IdProduk"`
+	LogProduk     logprodukmodel.LogProduk     `json:"-" gorm:"foreignKey:IdProduk"`
 	UpdatedAt     time.Time                    `json:"-"`
 	CreatedAt     time.Time                    `json:"-"`
 }

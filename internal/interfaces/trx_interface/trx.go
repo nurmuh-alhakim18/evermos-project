@@ -11,12 +11,13 @@ type TrxRepostoryInterface interface {
 	CreateTrx(ctx context.Context, trx *trxmodel.Trx) (*int, error)
 	GetTrxByUserID(ctx context.Context, userID, limit, offset int) ([]trxmodel.Trx, error)
 	GetTrxByID(ctx context.Context, trxID int) (*trxmodel.Trx, error)
+	UpdateTotalPrice(ctx context.Context, trxID, totalPrice int) error
 }
 
 type TrxServiceInterface interface {
 	CreateTrx(ctx context.Context, userID int, req trxmodel.TrxReq) (*int, error)
-	GetTrxByUserID(ctx context.Context, userID, limit, page int, search string) ([]trxmodel.Trx, error)
-	GetTrxByID(ctx context.Context, trxID int) (*trxmodel.Trx, error)
+	GetTrxByUserID(ctx context.Context, userID, limit, page int, search string) ([]trxmodel.GetTrxResp, error)
+	GetTrxByID(ctx context.Context, trxID int) (*trxmodel.GetTrxResp, error)
 }
 
 type TrxHandlerInterface interface {

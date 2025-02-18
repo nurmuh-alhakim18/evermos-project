@@ -5,8 +5,10 @@ import (
 	"log"
 
 	alamatmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/alamat_model"
+	detailtrxmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/detail_trx_model"
 	fotoprodukmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/foto_produk_model"
 	kategorimodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/kategori_model"
+	logprodukmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/log_produk_model"
 	produkmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/produk_model"
 	tokomodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/toko_model"
 	trxmodel "github.com/nurmuh-alhakim18/evermos-project/internal/models/trx_model"
@@ -48,5 +50,7 @@ func LoadDatabase() {
 		&produkmodel.Produk{},
 		&fotoprodukmodel.FotoProduk{},
 		&trxmodel.Trx{},
+		&logprodukmodel.LogProduk{},
+		&detailtrxmodel.DetailTrx{},
 	)
 }

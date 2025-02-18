@@ -13,6 +13,7 @@ type ProdukRepositoryInterface interface {
 	GetProdukByID(ctx context.Context, produkID int) (*produkmodel.Produk, error)
 	UpdateProduk(ctx context.Context, produkID int, produkInput produkmodel.UpdateProduk) error
 	DeleteProduk(ctx context.Context, produkID int) error
+	UpdateStokAfterTransaction(ctx context.Context, produkID, kuantitas int) error
 }
 
 type ProdukServiceInterface interface {
@@ -21,6 +22,7 @@ type ProdukServiceInterface interface {
 	GetProdukByID(ctx context.Context, produkID int) (*produkmodel.GetProdukResp, error)
 	UpdateProduk(ctx context.Context, produkID int, req produkmodel.ProdukReq) error
 	DeleteProduk(ctx context.Context, produkID int) error
+	UpdateStokAfterTransaction(ctx context.Context, produkID, kuantitas int) error
 }
 
 type ProdukHandlerInterface interface {

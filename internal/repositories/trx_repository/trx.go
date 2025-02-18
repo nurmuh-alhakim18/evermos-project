@@ -39,3 +39,8 @@ func (r *TrxRepository) GetTrxByID(ctx context.Context, trxID int) (*trxmodel.Tr
 
 	return &trx, nil
 }
+
+func (r *TrxRepository) UpdateTotalPrice(ctx context.Context, trxID, totalPrice int) error {
+	var trx trxmodel.Trx
+	return r.DB.WithContext(ctx).Model(&trx).Where("id = ?", trxID).Update("harga_total", totalPrice).Error
+}

@@ -78,3 +78,13 @@ func (r *ProdukRepository) DeleteProduk(ctx context.Context, produkID int) error
 	var produk produkmodel.Produk
 	return r.DB.WithContext(ctx).Delete(&produk, produkID).Error
 }
+
+func (r *ProdukRepository) UpdateStokAfterTransaction(ctx context.Context, produkID, kuantitas int) error {
+	produk, err := r.GetProdukByID(ctx, produkID)
+	if err != nil {
+		return err
+	}
+
+	stokBaru := produk.Stok - kuantitas
+	return r.DB.WithContext(ctx).Model(produk).Where("id = ?", produkID).Update("stok", stokBaru).Error
+}

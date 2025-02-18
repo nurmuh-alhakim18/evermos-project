@@ -218,3 +218,12 @@ func (s *ProdukService) DeleteProduk(ctx context.Context, produkID int) error {
 
 	return nil
 }
+
+func (s *ProdukService) UpdateStokAfterTransaction(ctx context.Context, produkID, kuantitas int) error {
+	err := s.ProdukRepository.UpdateStokAfterTransaction(ctx, produkID, kuantitas)
+	if err != nil {
+		return fmt.Errorf("failed to update stok after tsx: %v", err)
+	}
+
+	return nil
+}

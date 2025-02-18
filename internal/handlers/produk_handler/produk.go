@@ -27,12 +27,42 @@ func (h *ProdukHandler) CreateProduk(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
 	}
 
-	namaProduk := form.Value["nama_produk"][0]
-	categoryIDString := form.Value["category_id"][0]
-	hargaReseller := form.Value["harga_reseller"][0]
-	hargaKonsumen := form.Value["harga_konsumen"][0]
-	stokString := form.Value["stok"][0]
-	deskripsi := form.Value["deskripsi"][0]
+	var namaProduk string
+	var categoryIDString string
+	var hargaReseller string
+	var hargaKonsumen string
+	var stokString string
+	var deskripsi string
+	namaProdukForm := form.Value["nama_produk"]
+	if len(namaProdukForm) > 0 {
+		namaProduk = namaProdukForm[0]
+	}
+
+	categoryIDForm := form.Value["category_id"]
+	if len(categoryIDForm) > 0 {
+		categoryIDString = categoryIDForm[0]
+	}
+
+	hargaResellerForm := form.Value["harga_reseller"]
+	if len(hargaResellerForm) > 0 {
+		hargaReseller = hargaResellerForm[0]
+	}
+
+	hargaKonsumenForm := form.Value["harga_konsumen"]
+	if len(hargaKonsumenForm) > 0 {
+		hargaKonsumen = hargaKonsumenForm[0]
+	}
+
+	stokForm := form.Value["stok"]
+	if len(stokForm) > 0 {
+		stokString = stokForm[0]
+	}
+
+	deskripsiForm := form.Value["deskripsi"]
+	if len(deskripsiForm) > 0 {
+		deskripsi = deskripsiForm[0]
+	}
+
 	photos := form.File["photos"]
 
 	categoryID, err := strconv.Atoi(categoryIDString)

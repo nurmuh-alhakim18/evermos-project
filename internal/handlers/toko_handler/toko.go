@@ -1,6 +1,7 @@
 package tokohandler
 
 import (
+	"mime/multipart"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -97,10 +98,27 @@ func (h *TokoHandler) UpdateToko(ctx *fiber.Ctx) error {
 		return helpers.SendResponse(ctx, fiber.StatusForbidden, false, constants.FailedDeleteMessage, constants.NotAuthorizedErr, nil)
 	}
 
-	name := ctx.FormValue("nama_toko")
-	photo, _ := ctx.FormFile("photo")
+	form, err := ctx.MultipartForm()
+	if err != nil {
+		return helpers.SendResponse(ctx, fiber.StatusBadRequest, false, constants.FailedPostMessage, err.Error(), nil)
+	}
 
-	req := tokomodel.UpdateTokoReq{NamaToko: name, Photo: photo}
+	var namaToko string
+	var photo *multipart.FileHeader
+	namaTokoForm := form.Value["nama_toko"]
+	if len(namaTokoForm) > 0 {
+		namaToko = namaTokoForm[0]
+	}
+
+	photosForm := form.File["photo"]
+	if len(photosForm) > 0 {
+		photo = photosForm[0]
+	}
+
+	// name := ctx.FormValue("nama_toko")
+	// photo, _ := ctx.FormFile("photo")
+
+	req := tokomodel.UpdateTokoReq{NamaToko: namaToko, Photo: photo}
 
 	err = h.TokoService.UpdateToko(ctx.Context(), tokoID, req)
 	if err != nil {

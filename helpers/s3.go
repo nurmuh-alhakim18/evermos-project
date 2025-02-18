@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"mime/multipart"
+	"path/filepath"
 	"slices"
 	"strings"
 	"time"
@@ -50,7 +51,13 @@ func UploadToS3(file *multipart.FileHeader) (string, error) {
 
 	defer src.Close()
 
-	fileName := fmt.Sprintf("%d-%s", time.Now().UnixNano(), file.Filename)
+	shortID, err := GenerateShortID()
+	if err != nil {
+		return "", err
+	}
+
+	fileExt := filepath.Ext(file.Filename)
+	fileName := fmt.Sprintf("%s%d%s", shortID, time.Now().Unix(), fileExt)
 	filePath := fmt.Sprintf("uploads/%s", fileName)
 	bucketName := GetEnv("BUCKET_NAME", "")
 	contentType := file.Header.Get("Content-Type")

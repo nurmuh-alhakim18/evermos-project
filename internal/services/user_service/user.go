@@ -3,7 +3,6 @@ package userservice
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/nurmuh-alhakim18/evermos-project/helpers"
@@ -27,7 +26,6 @@ func (s *UserService) Register(ctx context.Context, req usermodel.User) error {
 		return fmt.Errorf("user already exists")
 	}
 
-	log.Println(req.KataSandi)
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.KataSandi), bcrypt.DefaultCost)
 	if err != nil {
 		return fmt.Errorf("failed to hash password: %v", err)

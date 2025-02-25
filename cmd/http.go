@@ -48,7 +48,7 @@ func ServeHTTP() {
 	dependency := dependencyInject(helpers.DB)
 
 	api := app.Group("/api/v1")
-	api.Get("/health", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.healthHandler.HealthCheck)
+	api.Get("/health", dependency.healthHandler.HealthCheck)
 
 	api.Post("/category", dependency.AuthMiddleware, dependency.AdminMiddleware, dependency.kategoriHandler.CreateKategori)
 	api.Get("/category", dependency.kategoriHandler.GetKategoris)

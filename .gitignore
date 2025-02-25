@@ -1,2 +1,6 @@
 .env
 evermos-project
+
+terraform.tfvars
+.terraform*
+*.tfstate*

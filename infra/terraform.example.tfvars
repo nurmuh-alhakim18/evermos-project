@@ -1,0 +1,5 @@
+aws_access_key = "your_aws_access_key"
+aws_secret_key = "your_aws_secret_key"
+rds_username   = "your_rds_username"
+rds_password   = "your_rds_password"
+rds_db_name    = "your_rds_name"

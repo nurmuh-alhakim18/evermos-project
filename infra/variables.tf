@@ -17,3 +17,7 @@ variable "rds_password" {
 variable "rds_db_name" {
 
 }
+
+variable "github_runner_token" {
+
+}

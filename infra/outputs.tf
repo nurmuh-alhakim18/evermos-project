@@ -13,3 +13,7 @@ output "rds_db_name" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.evermos_bucket.id
 }
+
+output "ec2_address" {
+  value = aws_instance.github_runner.public_ip
+}

@@ -43,4 +43,4 @@ jobs:
       - name: Delete Old Docker Container
         run: docker rm -f evermos-project
       - name: Run Docker Container
-        run: docker run -p 8000:8000 --name evermos-project kimoutofkims/evermos
+        run: docker run -d -p 8000:8000 --name evermos-project kimoutofkims/evermos

@@ -27,12 +27,19 @@ func (r *WilayahRepository) GetProvinces(ctx context.Context, search string, off
 		return nil, err
 	}
 
+	var searchedProvinces []usermodel.Provinsi
 	if search != "" {
 		for _, p := range provinces {
-			if p.Name == strings.ToUpper(search) {
-				return []usermodel.Provinsi{p}, nil
+			if strings.Contains(strings.ToUpper(p.Name), strings.ToUpper(search)) {
+				searchedProvinces = append(searchedProvinces, p)
 			}
 		}
+
+		if limit < len(searchedProvinces) {
+			return searchedProvinces[offset : offset+limit], nil
+		}
+
+		return searchedProvinces, nil
 	}
 
 	if limit < len(provinces) {
